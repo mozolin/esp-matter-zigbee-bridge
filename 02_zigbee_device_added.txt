@@ -1,0 +1,14 @@
+I (xxx) esp_zboss: New device commissioned or rejoined (short: 0xbc4f)
+I (xxx) zigbee_bridge: on_off_light found: address:0xbc4f, endpoint:1, response_status:0
+I (xxx) esp_matter_bridge: Cluster plugin init for the new added endpoint
+I (xxx) esp_matter_attribute: ********** R : Endpoint 0x0002's Cluster 0x00000003's Attribute 0x00000001 is 1 **********
+I (xxx) esp_matter_attribute: ********** R : Endpoint 0x0002's Cluster 0x00000004's Attribute 0x00000000 is 128 **********
+I (xxx) esp_matter_attribute: ********** R : Endpoint 0x0002's Cluster 0x00000004's Attribute 0x0000FFFC is 1 **********
+I (xxx) esp_matter_attribute: ********** R : Endpoint 0x0002's Cluster 0x00000006's Attribute 0x0000FFFC is 1 **********
+I (xxx) esp_matter_attribute: ********** R : Endpoint 0x0002's Cluster 0x00000006's Attribute 0x00004003 is 0 **********
+I (xxx) esp_matter_attribute: ********** R : Endpoint 0x0002's Cluster 0x00000006's Attribute 0x00000000 is 0 **********
+I (xxx) chip[ZCL]: Boot reason: 6
+I (xxx) esp_matter_attribute: ********** R : Endpoint 0x0002's Cluster 0x00000006's Attribute 0x00000000 is 0 **********
+I (xxx) chip[ZCL]: Endpoint 2 On/off already set to new value
+I (xxx) esp_matter_core: Dynamic endpoint 2 added
+I (xxx) zigbee_bridge: Create/Update bridged node for 0xbc4f zigbee device on endpoint 2
