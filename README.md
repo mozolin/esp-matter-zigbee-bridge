@@ -1,3 +1,2 @@
 
-- переименовать TEST_PRODUCT в Zigbee_Bridge
-- обновить картинки 04_... и 05_...
+# ESP Matter Zigbee Bridge Example: Extended
