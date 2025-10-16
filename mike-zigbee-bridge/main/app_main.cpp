@@ -34,7 +34,7 @@ uint16_t aggregator_endpoint_id = chip::kInvalidEndpointId;
 // ДОБАВЛЕНО: Конфигурация кнопок и светодиода для ESP32-S3
 #define BUTTON_BOOT_GPIO   GPIO_NUM_0   // BOOT button
 #define BUTTON_RESET_GPIO  GPIO_NUM_1   // RESET button (проверьте спецификацию вашей платы)
-#define LED_GPIO           GPIO_NUM_2   // Встроенный светодиод (может быть GPIO2, GPIO8 или другим - проверьте плату)
+#define LED_GPIO           GPIO_NUM_8   // Встроенный светодиод (может быть GPIO2, GPIO8 или другим - проверьте плату)
 
 // ДОБАВЛЕНО: Переменные для антидребезга и управления светодиодом
 static uint64_t last_button_press_time = 0;
@@ -338,6 +338,8 @@ extern "C" void app_main()
     ESP_LOGI(TAG, "Manual discovery: Press BOOT or RESET button");
     ESP_LOGI(TAG, "LED will blink during discovery process");
     ESP_LOGI(TAG, "==========================================");
+    
+    gpio_set_level(LED_GPIO, 0);
 
     launch_app_zboss();
 }
