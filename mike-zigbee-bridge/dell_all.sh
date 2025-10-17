@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
 
-#rm -rf build/ managed_components/
-rm -rf build/ dependencies.lock sdkconfig
+rm -rf build/ managed_components/ dependencies.lock sdkconfig
