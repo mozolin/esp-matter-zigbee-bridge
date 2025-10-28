@@ -23,6 +23,9 @@
 #include <driver/gpio.h>
 #include <esp_timer.h>
 
+#include "driver_reset_button.h"
+
+
 static const char *TAG = "app_main";
 
 using namespace esp_matter;
@@ -32,7 +35,8 @@ using namespace esp_matter::endpoint;
 uint16_t aggregator_endpoint_id = chip::kInvalidEndpointId;
 
 // ДОБАВЛЕНО: Конфигурация кнопок и светодиода для ESP32-S3
-#define BUTTON_BOOT_GPIO   GPIO_NUM_0   // BOOT button
+//#define BUTTON_BOOT_GPIO   GPIO_NUM_0   // BOOT button
+/*
 #define BUTTON_RESET_GPIO  GPIO_NUM_1   // RESET button (проверьте спецификацию вашей платы)
 #define LED_GPIO           GPIO_NUM_8   // Встроенный светодиод (может быть GPIO2, GPIO8 или другим - проверьте плату)
 
@@ -172,6 +176,7 @@ static void button_init(void)
     ESP_LOGI(TAG, "Buttons initialized - BOOT: GPIO%d, RESET: GPIO%d", BUTTON_BOOT_GPIO, BUTTON_RESET_GPIO);
     ESP_LOGI(TAG, "Press BOOT or RESET button to start Zigbee device discovery");
 }
+*/
 
 static void app_event_cb(const ChipDeviceEvent *event, intptr_t arg)
 {
@@ -183,13 +188,13 @@ static void app_event_cb(const ChipDeviceEvent *event, intptr_t arg)
     case chip::DeviceLayer::DeviceEventType::kCommissioningComplete:
         ESP_LOGI(TAG, "Commissioning complete");
         // ДОБАВЛЕНО: Индикация успешной комиссии
-        led_blink(3, 200);
+        //led_blink(3, 200);
         break;
 
     case chip::DeviceLayer::DeviceEventType::kFailSafeTimerExpired:
         ESP_LOGI(TAG, "Commissioning failed, fail safe timer expired");
         // ДОБАВЛЕНО: Индикация ошибки
-        led_blink(5, 100);
+        //led_blink(5, 100);
         break;
 
     case chip::DeviceLayer::DeviceEventType::kCommissioningSessionStarted:
@@ -203,12 +208,12 @@ static void app_event_cb(const ChipDeviceEvent *event, intptr_t arg)
     case chip::DeviceLayer::DeviceEventType::kCommissioningWindowOpened:
         ESP_LOGI(TAG, "Commissioning window opened");
         // ДОБАВЛЕНО: Медленное мигание при открытом окне комиссии
-        led_blink(1, 1000);
+        //led_blink(1, 1000);
         break;
 
     case chip::DeviceLayer::DeviceEventType::kCommissioningWindowClosed:
         ESP_LOGI(TAG, "Commissioning window closed");
-        led_set(false);
+        //led_set(false);
         break;
 
     default:
@@ -294,10 +299,10 @@ extern "C" void app_main()
     nvs_flash_init();
 
     // ДОБАВЛЕНО: Инициализация светодиода
-    led_init();
+    //led_init();
     
     // ДОБАВЛЕНО: Индикация старта системы
-    led_blink(1, 500);
+    //led_blink(1, 500);
 
     /* Create a Matter node and add the mandatory Root Node device type on endpoint 0 */
     node::config_t node_config;
@@ -309,6 +314,35 @@ extern "C" void app_main()
     ABORT_APP_ON_FAILURE(aggregator != nullptr, ESP_LOGE(TAG, "Failed to create aggregator endpoint"));
 
     aggregator_endpoint_id = endpoint::get_id(aggregator);
+    
+    /*
+    // === ДОБАВЬТЕ ЭТОТ КОД ===
+    // После создания node, можно также изменить endpoint 0
+		endpoint_t *root_endpoint = esp_matter::endpoint::get(node, 0);
+		if(root_endpoint) {
+      ESP_LOGW(TAG, "~~~ Root endpoint!");
+
+      cluster_t *basic_info_cluster = esp_matter::cluster::get(root_endpoint, 0x0028);
+      if(basic_info_cluster) {
+        ESP_LOGW(TAG, "~~~ BasicInformation cluster!");
+      
+        char vendor_name[] = "Mike Home";
+        esp_matter_attr_val_t vendor_name_val = esp_matter_char_str(vendor_name, strlen(vendor_name));
+        attribute_t *vendor_name_attr = esp_matter::attribute::get(basic_info_cluster, chip::app::Clusters::BasicInformation::Attributes::VendorName::Id);
+        if(vendor_name_attr) {
+        	ESP_LOGW(TAG, "~~~ VendorName attribute SET!");
+        	esp_matter::attribute::set_val(vendor_name_attr, &vendor_name_val);
+        } else {
+        	ESP_LOGE(TAG, "~~~ VendorName attr NOT found!");
+        }
+      } else {
+      	ESP_LOGE(TAG, "~~~ BasicInformation cluster NOT found!");
+      }
+		} else {
+			ESP_LOGE(TAG, "~~~ Root endpoint NOT found!");
+		}
+		// === КОНЕЦ ДОБАВЛЕННОГО КОДА ===
+		*/
 
     /* Matter start */
     err = esp_matter::start(app_event_cb);
@@ -318,28 +352,36 @@ extern "C" void app_main()
     ABORT_APP_ON_FAILURE(err == ESP_OK, ESP_LOGE(TAG, "Failed to resume the bridged endpoints: %d", err));
 
     // ДОБАВЛЕНО: Инициализация кнопок
-    button_init();
+    //button_init();
 
-#if CONFIG_ENABLE_CHIP_SHELL
-    esp_matter::console::diagnostics_register_commands();
-    esp_matter::console::wifi_register_commands();
-    esp_matter::console::factoryreset_register_commands();
-    esp_matter::console::init();
-#endif
+    
+
+		#if CONFIG_ENABLE_CHIP_SHELL
+      esp_matter::console::diagnostics_register_commands();
+      esp_matter::console::wifi_register_commands();
+      esp_matter::console::factoryreset_register_commands();
+      esp_matter::console::init();
+		#endif
 
     // ДОБАВЛЕНО: Индикация готовности системы
-    led_blink(3, 100);
-    vTaskDelay(pdMS_TO_TICKS(500));
-    led_blink(3, 100);
+    //led_blink(3, 100);
+    //vTaskDelay(pdMS_TO_TICKS(500));
+    //led_blink(3, 100);
 
-    ESP_LOGI(TAG, "==========================================");
-    ESP_LOGI(TAG, "Zigbee Bridge Started");
-    ESP_LOGI(TAG, "Auto-discovery: DISABLED");
-    ESP_LOGI(TAG, "Manual discovery: Press BOOT or RESET button");
-    ESP_LOGI(TAG, "LED will blink during discovery process");
-    ESP_LOGI(TAG, "==========================================");
+    ESP_LOGW("", "");
+    ESP_LOGW(TAG, "###########################################");
+    ESP_LOGW(TAG, "#   Zigbee Bridge Started                 #");
+    ESP_LOGW(TAG, "#   Auto-discovery: DISABLED              #");
+    ESP_LOGW(TAG, "#   Manual discovery: Press BOOT button   #");
+    ESP_LOGW(TAG, "###########################################");
+    ESP_LOGW("", "");
     
-    gpio_set_level(LED_GPIO, 0);
+    //gpio_set_level(LED_GPIO, 0);
 
     launch_app_zboss();
+
+    vTaskDelay(pdMS_TO_TICKS(1000));
+    //-- Start reboot button task
+    reboot_button_task();
+  	//xTaskCreate(reboot_button_task, "reboot_button_task", 2048, NULL, 5, NULL);
 }

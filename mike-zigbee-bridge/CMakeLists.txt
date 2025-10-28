@@ -17,9 +17,6 @@ if(NOT DEFINED ENV{ESP_MATTER_DEVICE_PATH})
     endif()
 endif(NOT DEFINED ENV{ESP_MATTER_DEVICE_PATH})
 
-set(PROJECT_VER "1.0")
-set(PROJECT_VER_NUMBER 1)
-
 set(ESP_MATTER_PATH $ENV{ESP_MATTER_PATH})
 set(MATTER_SDK_PATH ${ESP_MATTER_PATH}/connectedhomeip/connectedhomeip)
 
@@ -34,10 +31,21 @@ set(EXTRA_COMPONENT_DIRS
     "${ESP_MATTER_PATH}/device_hal/device"
     ${extra_components_dirs_append})
 
-project(zigbee_bridge)
-
 idf_build_set_property(CXX_COMPILE_OPTIONS "-std=gnu++17;-Os;-DCHIP_HAVE_CONFIG_H;-fpermissive;-Wno-overloaded-virtual" APPEND)
 idf_build_set_property(C_COMPILE_OPTIONS "-Os" APPEND)
 # For RISCV chips, project_include.cmake sets -Wno-format, but does not clear various
 # flags that depend on -Wformat
 idf_build_set_property(COMPILE_OPTIONS "-Wno-format-nonliteral;-Wno-format-security;-Wno-error=cpp" APPEND)
+
+
+set(DEVICE_VENDOR_NAME "Mike_Home")
+set(DEVICE_PRODUCT_NAME "Mike_Zigbee_Bridge")
+set(DEVICE_HARDWARE_VERSION_STRING "2.2.2")
+set(PROJECT_VER "1.1.1")
+set(PROJECT_VER_NUMBER 1)
+
+idf_build_set_property(COMPILE_OPTIONS "-DCHIP_DEVICE_CONFIG_DEVICE_VENDOR_NAME=\"${DEVICE_VENDOR_NAME}\"" APPEND)
+idf_build_set_property(COMPILE_OPTIONS "-DCHIP_DEVICE_CONFIG_DEVICE_PRODUCT_NAME=\"${DEVICE_PRODUCT_NAME}\"" APPEND)
+idf_build_set_property(COMPILE_OPTIONS "-DCHIP_DEVICE_CONFIG_DEFAULT_DEVICE_HARDWARE_VERSION_STRING=\"${DEVICE_HARDWARE_VERSION_STRING}\"" APPEND)
+
+project(zigbee_bridge)

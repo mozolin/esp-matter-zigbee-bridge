@@ -81,7 +81,7 @@ void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_struct)
         ESP_LOGI(TAG, "New device commissioned or rejoined (short: 0x%04hx)", dev_annce_params->device_short_addr);
         
         // ИЗМЕНЕНО: АВТОМАТИЧЕСКИЙ ПОИСК ОТКЛЮЧЕН - только логируем событие
-        ESP_LOGI(TAG, "Device announcement received for 0x%04hx - Auto-discovery disabled, use button to discover", 
+        ESP_LOGW(TAG, "~~~ Device announcement received for 0x%04hx - Auto-discovery disabled, use button to discover", 
                  dev_annce_params->device_short_addr);
         break;
 

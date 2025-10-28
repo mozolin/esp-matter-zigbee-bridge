@@ -1,0 +1,12 @@
+menu "Custom Device/Firmware Configuration"
+
+  config DEFAULT_DEVICE_HARDWARE_VERSION
+    int "Default Device Hardware Version"
+    range 0 65535
+    default 0
+
+  config DEVICE_SOFTWARE_VERSION_NUMBER
+    int "Device Software Version Number"
+    default 0
+
+endmenu
